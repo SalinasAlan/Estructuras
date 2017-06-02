@@ -112,6 +112,69 @@ public class ArbolBinario implements OpEDD
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public NodoArbol elimina(String cve, NodoArbol r, ArbolBinario a)
+    {
+        if (r != null)
+        {
+            if (!r.getClave().equals(cve))
+            {
+                if (r.getClave().compareTo(cve) > 0)
+                {
+                    r.setIzq(elimina(cve, r.getIzq(), a));
+                } else
+                {
+                    r.setDer(elimina(cve, r.getDer(), a));
+                }
+            } else
+            {
+                a.setR(r);
+                if (r.getIzq() == null && r.getDer() == null)
+                {
+                    return null;
+                } else
+                {
+                    if (!(r.getIzq()!= null && r.getDer()!=null))
+                    {
+                        if (r.getIzq() != null)
+                        {
+                            return r.getIzq();
+                        }else
+                        {
+                            return r.getDer();
+                        }
+                    }else
+                    {
+                        NodoArbol se, s2;
+                        if (r.getDer().getIzq() == null)
+                        {
+                            se = r.getDer();
+                        }else
+                        {
+                            s2 = sucesor(r.getDer());
+                            se = s2.getIzq();
+                            s2.setIzq(se.getDer());
+                            se.setDer(r.getDer());
+                        }
+                        se.setIzq(r.getIzq());
+                        r = se;
+                    }
+                }
+            }
+        }
+        return r;
+    }
+
+    public NodoArbol sucesor(NodoArbol r)
+    {
+        if (r.getIzq().getIzq()!=null)
+        {
+            return sucesor(r.getIzq());
+        }else
+        {
+            return r;
+        }
+    }
+    
     public void rEnOrden(NodoArbol r)
     {
         if (r != null)
